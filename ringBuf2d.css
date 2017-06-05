@@ -1,13 +1,22 @@
 body{
 	margin:0;
 	overflow:hidden;
-	background:#666;
+	background:#999;
 	width: 100%;
-	height: 100%;
+	height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 #div{
 	position:relative;
+}
+#div > canvas{
+	background: #333;
+}
+#stat{
+	position:absolute;
+	font-size: 5em;
+	font-weight: 900;
+	color: rgba(111,111,111,.66);
 }

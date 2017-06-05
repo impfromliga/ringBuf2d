@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html><head><link rel=stylesheet href="ringBuf2d.css"></head><body>
+<script src="ringBuf2d.js"></script>
+<div id=div><span id=stat></span></div>
+<script>
+	"use strict";
+	var cnv = document.createElement('canvas'), ctx = cnv.getContext('2d'),
+		dotW = 20, dotH = 20;
+	cnv.width = 16*dotW, cnv.height = 16*dotH;
+	div.appendChild(ctx.canvas);
+
+	var buf2d = Buf2d(4,4)//create RING 2d buffer (width = height = 2**4);
+		.onfill(function(x,y,w,h){//auto generate data chunk:
+			setTimeout((function(){
+				this.put(x,y, Array(w*h).fill().map((v,i)=>{
+					var res = ctx.fillStyle = 'hsl(' + (x+(i%w)) * 12 + ',50%,' + Math.abs(Math.abs((y+(i/w|0)) * 20 % 200) - 100) + '%)';
+					ctx.fillRect( (x - this.x + (i%w)) * dotW, (y - this.y + (i/w|0)) * dotH, dotW, dotH);
+					return res;
+				}), w);
+			}).bind(this),200*(1+Math.random() ) )
+		})
+		.moveTo(0,0) //need for fill buffer, because filler() works only when buffer moves to new area
+		.onmove((x,y)=>{
+			var X = Math.floor(x), Y = Math.floor(y);
+			if(X|Y)	ctx.drawImage(ctx.canvas,X*dotW,Y*dotH); //fast replace actual canvas part
+			div.style.cssText = 'left:' + (x-X)*dotW + 'px;top:' + (y-Y)*dotH + 'px';
+			stat.innerHTML = buf2d.x + ',' + buf2d.y;
+		})
+	window.ontouchmove = onmousemove = function(E){
+		var e = E.changedTouches || E; e.stopPropagation && e.stopPropagation(); e.preventDefault && e.preventDefault();
+		if(!e.buttons)return false;
+		var dx = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+		var dy = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+		buf2d.moveBy( -dx/dotW, -dy/dotH );
+	}
+</script>
+</body></html>
