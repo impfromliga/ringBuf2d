@@ -1,38 +1,67 @@
 <!DOCTYPE HTML>
-<html><head><link rel=stylesheet href="ringBuf2d.css"><script src="ringBuf2d.js"></script></head><body><div id=div></div><script>"use strict";
-var cnv = document.createElement('canvas'), ctx = cnv.getContext('2d');
-var dotW=5,dotH=5, w2n = Math.log2(innerWidth / dotW) | 0, h2n = Math.log2(innerHeight / dotH) | 0;
-cnv.width = dotW << w2n, cnv.height = dotH << h2n;
-div.appendChild(cnv);
-	
-onload = function(){
-var buf2d = Buf2d(0,0,w2n, h2n)
-.onmove(function(dx, dy, dt){
-	if( Math.hypot(dx, dy) > 8 || (dt -= 3000) > 0){ //check min range lim to allow onfill(), or max delta time latency (save dt for return)
-		var x = Math.floor(dx), y = Math.floor(dy); //compute integer coord to replace picture
-		ctx.drawImage(cnv, x * dotW, y * dotH ); //replace
-		dx -= x, dy -= y; //increese dx/dy - by (int released motion) x,y - to compute accumulable motion
-	}
-	div.style.left = dx * dotW + 'px'; div.style.top = dy * dotH + 'px'; //move element by css (accumulable motion)
-	return -dt; //return interval(ms>0) if you cancel and want fill buffer later (to allow onfill() return <=0 or undefined)
-})
-.onfill(function(x1, y1, w, h){
-	setTimeout((function(){
-		for(var arr = [], y = y1, y2 = y1 + h; y < y2; y++)
-			for(var x = x1, x2 = x1 + w; x < x2; x++){
-				ctx.fillStyle = 'hsl(' + x * 4 + ',50%,' + Math.abs(Math.abs(y * 4 % 200) - 100) + '%';
-				ctx.fillRect( (x - this.x) * dotW, (y - this.y) * dotH, dotW - 1, dotH - 1);
-				arr.push(ctx.fillStyle);
+<html>
+
+<head>
+	<link rel=stylesheet href="ringBuf2d.css">
+	<script src="ringBuf2d.js"></script>
+</head>
+
+<body>
+	<div id=div></div>
+	<script>
+		"use strict";
+		var cnv = document.createElement('canvas'),
+			ctx = cnv.getContext('2d');
+		var dotW = 5,
+			dotH = 5,
+			w2n = Math.log2(innerWidth / dotW) | 0,
+			h2n = Math.log2(innerHeight / dotH) | 0,
+			tap;
+		cnv.width = dotW << w2n, cnv.height = dotH << h2n;
+		div.appendChild(cnv);
+
+		onload = function () {
+			var buf2d = Buf2d(0, 0, w2n, h2n)
+				.onmove(function (dx, dy, dt) {
+					if (Math.hypot(dx, dy) > 1 || (dt -= 3000) > 0) { //check min range lim to allow onfill(), or max delta time latency (save dt for return)
+						var x = Math.floor(dx),
+							y = Math.floor(dy); //compute integer coord to replace picture
+						ctx.drawImage(cnv, x * dotW, y * dotH); //replace
+						dx -= x, dy -= y; //increese dx/dy - by (int released motion) x,y - to compute accumulable motion
+					}
+					div.style.left = dx * dotW + 'px';
+					div.style.top = dy * dotH + 'px'; //move element by css (accumulable motion)
+					return -dt; //return interval(ms>0) if you cancel and want fill buffer later (to allow onfill() return <=0 or undefined)
+				})
+				.onfill(function (x1, y1, w, h) {
+					setTimeout((function () {
+						for (var arr = [], y = y1, y2 = y1 + h; y < y2; y++)
+							for (var x = x1, x2 = x1 + w; x < x2; x++) {
+								ctx.fillStyle = 'hsl(' + x * 4 + ',50%,' + Math.abs(Math.abs(y * 4 % 200) - 100) + '%';
+								ctx.fillRect((x - this.x) * dotW, (y - this.y) * dotH, dotW - 1, dotH - 1);
+								arr.push(ctx.fillStyle);
+							}
+						this.put(x1, y1, arr, w);
+					}).bind(this), 400 * (1 + Math.random())); //emulate load latensy random 50-100ms
+				});
+			window.ontouchstart = function (E) {
+				E.stopPropagation && E.stopPropagation();
+				E.preventDefault && E.preventDefault();
+				tap = false;
 			}
-		this.put(x1, y1, arr, w);
-	}).bind(this), 200*(1 + Math.random() ) ); //emulate load latensy random 50-100ms
-});
-window.ontouchmove = onmousemove = function(E){
-	var e = E.changedTouches || E; e.stopPropagation && e.stopPropagation(); e.preventDefault && e.preventDefault();
-	if(!e.buttons)return false;
-	var dx = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-	var dy = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-	buf2d.moveBy( -dx/dotW, -dy/dotH );
-}
-}
-</script></body></html>
+			window.ontouchmove = onmousemove = function (E) {
+				E.stopPropagation && E.stopPropagation();
+				E.preventDefault && E.preventDefault();
+				var e = E.changedTouches ? E.changedTouches[0] : E;
+				var dx = (e.pageX - (tap || e).pageX) || 0;
+				var dy = (e.pageY - (tap || e).pageY) || 0;
+				if (e.buttons === 0) return tap = false;
+				else tap = e;
+				buf2d.moveBy(-dx / dotW, -dy / dotH);
+				return false;
+			}
+		}
+	</script>
+</body>
+
+</html>
