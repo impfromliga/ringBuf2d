@@ -3,20 +3,23 @@
 
 <head>
 	<link rel=stylesheet href="ringBuf2d.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 </head>
 
 <body>
 	<script src="ringBuf2d.js"></script>
+	<div id=div><span id=stat></span></div>
 	<div id=panel>
 		<a href="ex4_autoDraw.html">⇦</a>5
 	</div>
-	<div id=div><span id=stat></span></div>
 	<script>
 		"use strict";
 		var cnv = document.createElement('canvas'),
 			ctx = cnv.getContext('2d'),
-			dotW = 45,
-			dotH = 45,
+			dotW = 20,
+			dotH = 20,
 			tap;
 		cnv.width = 16 * dotW, cnv.height = 16 * dotH;
 		//try to fix blur bug:
