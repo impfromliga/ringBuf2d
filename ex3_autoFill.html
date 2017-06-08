@@ -7,9 +7,11 @@
 
 <body>
 	<script src="ringBuf2d.js"></script>
-	<a href="ex2_flowMove.html">⇦</a>3
-	<a href="ex4_autoDraw.html">⇨</a>
 	<div id=div><span id=stat></span></div>
+	<div id=panel>
+		<a href="ex2_flowMove.html">⇦</a>3
+		<a href="ex4_autoDraw.html">⇨</a>
+	</div>
 	<script>
 		"use strict";
 		var cnv = document.createElement('canvas'),
@@ -44,12 +46,12 @@
 				}
 		}
 		render();
-		window.ontouchstart = function(E){
+		div.ontouchstart = function(E){
 			E.stopPropagation && E.stopPropagation();
 			E.preventDefault && E.preventDefault();
 			tap = false;
 		}
-		window.ontouchmove = onmousemove = function (E) {
+		div.ontouchmove = div.onmousemove = function (E) {
 			E.stopPropagation && E.stopPropagation();
 			E.preventDefault && E.preventDefault();
 			var e = E.changedTouches ? E.changedTouches[0] : E;

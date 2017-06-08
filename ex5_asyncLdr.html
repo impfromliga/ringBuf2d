@@ -7,7 +7,9 @@
 
 <body>
 	<script src="ringBuf2d.js"></script>
-	<a href="ex4_autoDraw.html">⇦</a>5
+	<div id=panel>
+		<a href="ex4_autoDraw.html">⇦</a>5
+	</div>
 	<div id=div><span id=stat></span></div>
 	<script>
 		"use strict";
@@ -36,12 +38,12 @@
 				div.style.cssText = 'left:' + (x - X) * dotW + 'px;top:' + (y - Y) * dotH + 'px';
 				stat.innerHTML = buf2d.x + ',' + buf2d.y;
 			})
-		window.ontouchstart = function(E){
+		div.ontouchstart = function (E) {
 			E.stopPropagation && E.stopPropagation();
 			E.preventDefault && E.preventDefault();
 			tap = false;
 		}
-		window.ontouchmove = onmousemove = function (E) {
+		div.ontouchmove = div.onmousemove = function (E) {
 			E.stopPropagation && E.stopPropagation();
 			E.preventDefault && E.preventDefault();
 			var e = E.changedTouches ? E.changedTouches[0] : E;

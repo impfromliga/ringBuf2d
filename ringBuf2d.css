@@ -14,7 +14,7 @@ a {
 	margin: 10px;
 	font-size: 10vh;
 	font-weight: 900;
-	background: #666;
+	background: rgba(0,0,0,.5);
 	text-decoration: none;
 }
 
@@ -31,4 +31,9 @@ a {
 	font-size: 5em;
 	font-weight: 900;
 	color: rgba(111, 111, 111, .66);
+}
+#panel {
+	position: fixed;
+	left:0;
+	top:0;
 }
