@@ -24,7 +24,7 @@ var buf2d = Buf2d(0,0,w2n, h2n)
 				ctx.fillRect( (x - this.x) * dotW, (y - this.y) * dotH, dotW - 1, dotH - 1);
 				arr.push(ctx.fillStyle);
 			}
-		this.put(x1, y1, arr, x2 - x1);
+		this.put(x1, y1, arr, w);
 	}).bind(this), 200*(1 + Math.random() ) ); //emulate load latensy random 50-100ms
 });
 window.ontouchmove = onmousemove = function(E){

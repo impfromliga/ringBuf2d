@@ -1,44 +1,56 @@
 <!DOCTYPE HTML>
-<html><head><link rel=stylesheet href="ringBuf2d.css"></head><body>
-<script src="ringBuf2d.js"></script>
-<div id=div><span id=stat></span></div>
-<script>
-	"use strict";
-	var cnv = document.createElement('canvas'), ctx = cnv.getContext('2d'),
-		dotW = 20, dotH = 20;
-	cnv.width = 16*dotW, cnv.height = 16*dotH;
-	div.appendChild(ctx.canvas);
+<html>
 
-	var buf2d = Buf2d(4,4)//create RING 2d buffer (width = height = 2**4);
-		.onfill((x1,y1,w,h)=>{//auto generate data chunk:
-			return Array(w*h).fill().map((v,i)=>
-				'hsl(' + (x1+(i%w)) * 12 + ',50%,' + Math.abs(Math.abs((y1+(i/w|0)) * 20 % 200) - 100) + '%)'
-			)
-		})
-		.moveTo(0,0) //need for fill buffer, because filler() works only when buffer moves to new area
-		.onmove((x,y)=>{
-			div.style.cssText = 'left:' + x*dotW + 'px;top:' + y*dotH + 'px'; render()
-			stat.innerHTML = buf2d.x + ',' + buf2d.y;
-		})
-	
-	function render(){
-		//requestAnimationFrame(render);
-		var y1 = buf2d.y, y2 = y1 + buf2d.h,
-			x1 = buf2d.x, x2 = x1 + buf2d.w;
-		for(var ctxY = 0, y = y1; y < y2; y++, ctxY+=dotH)
-			for(var ctxX = 0, x = x1; x < x2; x++, ctxX+=dotW){
-				ctx.fillStyle = buf2d(x,y);
-				ctx.fillRect(ctxX,ctxY,dotW,dotH);
-			}
-	}
-	render();
+<head>
+	<link rel=stylesheet href="ringBuf2d.css">
+</head>
 
-	window.ontouchmove = onmousemove = function(E){
-		var e = E.changedTouches || E; e.stopPropagation && e.stopPropagation(); e.preventDefault && e.preventDefault();
-		if(!e.buttons)return false;
-		var dx = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-		var dy = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-		buf2d.moveBy( -dx/dotW, -dy/dotH );
-	}
-</script>
-</body></html>
+<body>
+	<script src="ringBuf2d.js"></script>
+	<div id=div><span id=stat></span></div>
+	<script>
+		"use strict";
+		var cnv = document.createElement('canvas'),
+			ctx = cnv.getContext('2d'),
+			dotW = 20,
+			dotH = 20;
+		cnv.width = 16 * dotW, cnv.height = 16 * dotH;
+		div.appendChild(ctx.canvas);
+		var buf2d = Buf2d(4, 4) //create RING 2d buffer (width = height = 2**4);
+			.onfill((x1, y1, w, h) => { //auto generate data chunk:
+				return Array(w * h).fill().map((v, i) =>
+					'hsl(' + (x1 + (i % w)) * 12 + ',50%,' + Math.abs(Math.abs((y1 + (i / w | 0)) * 20 % 200) - 100) + '%)'
+				)
+			})
+			.moveTo(0, 0) //need for fill buffer, because filler() works only when buffer moves to new area
+			.onmove((x, y) => {
+				div.style.cssText = 'left:' + x * dotW + 'px;top:' + y * dotH + 'px';
+				render()
+				stat.innerHTML = buf2d.x + ',' + buf2d.y;
+			})
+		function render() {
+			//requestAnimationFrame(render);
+			var y1 = buf2d.y,
+				y2 = y1 + buf2d.h,
+				x1 = buf2d.x,
+				x2 = x1 + buf2d.w;
+			for (var ctxY = 0, y = y1; y < y2; y++, ctxY += dotH)
+				for (var ctxX = 0, x = x1; x < x2; x++, ctxX += dotW) {
+					ctx.fillStyle = buf2d(x, y);
+					ctx.fillRect(ctxX, ctxY, dotW, dotH);
+				}
+		}
+		render();
+		window.ontouchmove = onmousemove = function (E) {
+			var e = E.changedTouches || E;
+			e.stopPropagation && e.stopPropagation();
+			e.preventDefault && e.preventDefault();
+			if (!e.buttons) return false;
+			var dx = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+			var dy = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+			buf2d.moveBy(-dx / dotW, -dy / dotH);
+		}
+	</script>
+</body>
+
+</html>
