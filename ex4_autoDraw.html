@@ -20,6 +20,8 @@
 			dotH = 45,
 			tap;
 		cnv.width = 16 * dotW, cnv.height = 16 * dotH;
+		//try to fix blur bug:
+		ctx.imageSmoothingEnabled = ctx.webkitImageSmoothingEnabled = ctx.mozImageSmoothingEnabled = ctx.oImageSmoothingEnabled = false;
 		div.appendChild(ctx.canvas);
 		var buf2d = Buf2d(4, 4) //create RING 2d buffer (width = height = 2**4);
 			.onfill(function (x, y, w, h) { //auto generate data chunk:
@@ -37,7 +39,7 @@
 				div.style.cssText = 'left:' + (x - X) * dotW + 'px;top:' + (y - Y) * dotH + 'px';
 				stat.innerHTML = buf2d.x + ',' + buf2d.y;
 			})
-		div.ontouchstart = function(E){
+		div.ontouchstart = function (E) {
 			E.stopPropagation && E.stopPropagation();
 			E.preventDefault && E.preventDefault();
 			tap = false;
