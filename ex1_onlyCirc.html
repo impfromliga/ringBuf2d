@@ -7,13 +7,15 @@
 
 <body>
 	<script src="ringBuf2d.js"></script>
+	1<a href="ex2_flowMove.html">⇨</a>
 	<div id=div><span id=stat></span></div>
 	<script>
 		"use strict";
 		var cnv = document.createElement('canvas'),
 			ctx = cnv.getContext('2d'),
-			dotW = 20,
-			dotH = 20;
+			dotW = 45,
+			dotH = 45,
+			tap;
 		cnv.width = 16 * dotW, cnv.height = 16 * dotH;
 		div.appendChild(ctx.canvas);
 		var data = Array(256).fill().map((v, i) => //generate abstract data array:
@@ -35,14 +37,21 @@
 				}
 		}
 		render();
+		window.ontouchstart = function (E) {
+			E.stopPropagation && E.stopPropagation();
+			E.preventDefault && E.preventDefault();
+			tap = false;
+		}
 		window.ontouchmove = onmousemove = function (E) {
-			var e = E.changedTouches || E;
-			e.stopPropagation && e.stopPropagation();
-			e.preventDefault && e.preventDefault();
-			if (!e.buttons) return false;
-			var dx = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-			var dy = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+			E.stopPropagation && E.stopPropagation();
+			E.preventDefault && E.preventDefault();
+			var e = E.changedTouches ? E.changedTouches[0] : E;
+			var dx = (e.pageX - (tap || e).pageX) || 0;
+			var dy = (e.pageY - (tap || e).pageY) || 0;
+			if (e.buttons === 0) return tap = false;
+			else tap = e;
 			buf2d.moveBy(-dx / dotW, -dy / dotH);
+			return false;
 		}
 	</script>
 </body>
