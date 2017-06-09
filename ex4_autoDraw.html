@@ -12,8 +12,8 @@
 	<script src="ringBuf2d.js"></script>
 	<div id=div><span id=stat></span></div>
 	<div id=panel>
-		<a href="ex3_autoFill.html">⇦</a>4
-		<a href="ex5_asyncLdr.html">⇨</a>
+		<a href="ex3_autoFill.html">⇦</a>4<a href="ex5_asyncLdr.html">⇨</a>
+		<br>Render function decomposite to mover|loader for maximize performance. Difference in code only.
 	</div>
 	<script>
 		"use strict";
@@ -23,7 +23,6 @@
 			dotH = 20,
 			tap;
 		cnv.width = 16 * dotW, cnv.height = 16 * dotH;
-		//try to fix blur bug:
 		ctx.imageSmoothingEnabled = ctx.webkitImageSmoothingEnabled = ctx.mozImageSmoothingEnabled = ctx.oImageSmoothingEnabled = false;
 		div.appendChild(ctx.canvas);
 		var buf2d = Buf2d(4, 4) //create RING 2d buffer (width = height = 2**4);

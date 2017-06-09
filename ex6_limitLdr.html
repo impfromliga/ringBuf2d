@@ -12,8 +12,8 @@
 	<script src="ringBuf2d.js"></script>
 	<div id=div><span id=stat></span></div>
 	<div id=panel>
-		<a href="ex4_autoDraw.html">⇦</a>5<a href="ex6_limitLdr.html">⇨</a>
-		<br>Async loader. Emulate low and unstable lan latensy by random setTimeout.
+		<a href="ex5_asyncLdr.html">⇦</a>6<a href="ex6_limitLdr.html">⇨</a>
+		<br>Loader limit by range and time. Buffer try moves grossly, for greater load perfomance. See changes in mover.
 	</div>
 	<script>
 		"use strict";
@@ -36,12 +36,12 @@
 				}).bind(this), 200 * (1 + Math.random()))
 			})
 			.moveTo(0, 0) //need for fill buffer, because filler() works only when buffer moves to new area
-			.onmove((x, y) => {
-				var X = Math.floor(x),
-					Y = Math.floor(y);
-				if (X | Y) ctx.drawImage(ctx.canvas, X * dotW, Y * dotH); //fast replace actual canvas part
-				div.style.cssText = 'left:' + (x - X) * dotW + 'px;top:' + (y - Y) * dotH + 'px';
-				stat.innerHTML = buf2d.x + ',' + buf2d.y;
+			.onmove((x, y, t) => {
+				var ix, iy = ix = 0; //exempting int part of coords (default 0)
+				if (Math.hypot(x, y) > 5 || (t -= 2000) >= 0) //lim range/time to allow filler, save t for return
+					ctx.drawImage(cnv, (ix = Math.floor(x)) * dotW, (iy = Math.floor(y)) * dotH); //move pic by int part, change default
+				div.style.cssText = 'left:' + (x - ix) * dotW + 'px;top:' + (y - iy) * dotH + 'px'; //accumulable motion: cur -int part
+				return -t; //return interval(ms>0) if you cancel and want fill buffer later (to allow onfill() return <=0 or undefined)
 			})
 		div.ontouchstart = function (E) {
 			E.stopPropagation && E.stopPropagation();

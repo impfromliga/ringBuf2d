@@ -25,16 +25,12 @@
 
 		onload = function () {
 			var buf2d = Buf2d(0, 0, w2n, h2n)
-				.onmove(function (dx, dy, dt) {
-					if (Math.hypot(dx, dy) > 1 || (dt -= 3000) > 0) { //check min range lim to allow onfill(), or max delta time latency (save dt for return)
-						var x = Math.floor(dx),
-							y = Math.floor(dy); //compute integer coord to replace picture
-						ctx.drawImage(cnv, x * dotW, y * dotH); //replace
-						dx -= x, dy -= y; //increese dx/dy - by (int released motion) x,y - to compute accumulable motion
-					}
-					div.style.left = dx * dotW + 'px';
-					div.style.top = dy * dotH + 'px'; //move element by css (accumulable motion)
-					return -dt; //return interval(ms>0) if you cancel and want fill buffer later (to allow onfill() return <=0 or undefined)
+				.onmove(function (x, y, t) {
+					var ix, iy = ix = 0; //exempting int part of coords (default 0)
+					if (Math.hypot(x, y) > 4 || (t -= 2000) >= 0) //lim range/time to allow filler, save t for return
+						ctx.drawImage(cnv, (ix = Math.floor(x)) * dotW, (iy = Math.floor(y)) * dotH); //move pic by int part, change default
+					div.style.cssText = 'left:' + (x - ix) * dotW + 'px;top:' + (y - iy) * dotH + 'px'; //accumulable motion: cur -int part
+					return -t; //undefined or <=0 to allow filler now; if you want fill buffer after delay return interval(ms) >0 
 				})
 				.onfill(function (x1, y1, w, h) {
 					setTimeout((function () {

@@ -10,7 +10,7 @@ body {
 }
 
 a {
-	padding: 10px 20px;
+	padding: 5px 20px;
 	margin: 10px;
 	font-size: 6vh;
 	font-weight: 900;
@@ -36,4 +36,5 @@ a {
 	position: fixed;
 	left:0;
 	top:0;
+	color: #fff;
 }

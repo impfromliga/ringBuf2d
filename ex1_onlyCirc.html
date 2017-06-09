@@ -12,7 +12,8 @@
 	<script src="ringBuf2d.js"></script>
 	<div id=div><span id=stat></span></div>
 	<div id=panel>
-		1<a href="ex2_flowMove.html">⇨</a>
+		<a href="ex1_onlyCirc.html">⇦</a>1<a href="ex2_flowMove.html">⇨</a>
+		<br>Simplest use RING buffer 2d, logic-only element cycling, full-iterate render by setInterval.
 	</div>
 	<script>
 		"use strict";
@@ -28,9 +29,8 @@
 		);
 		var buf2d = Buf2d(4, 4) //create RING 2d buffer (width = height = 2**4);
 			.put(0, 0, data); // put data in it.
-		function render() {
+		setInterval(function render() {
 			stat.innerHTML = buf2d.x + ',' + buf2d.y;
-			requestAnimationFrame(render);
 			var y1 = buf2d.y,
 				y2 = y1 + buf2d.h,
 				x1 = buf2d.x,
@@ -40,8 +40,7 @@
 					ctx.fillStyle = buf2d(x, y);
 					ctx.fillRect(ctxX, ctxY, dotW, dotH);
 				}
-		}
-		render();
+		},16.66);
 		div.ontouchstart = function (E) {
 			E.stopPropagation && E.stopPropagation();
 			E.preventDefault && E.preventDefault();

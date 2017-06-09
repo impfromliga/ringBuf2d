@@ -77,6 +77,7 @@ buf2d.put(x, y, data, w) /* где:
 8. Рекомендуемый порядок просмотра live примеров исходного кода:
   * <https://impfromliga.github.io/ringBuf2d/ex1_onlyCirc.html> - простейший пример использования RING 2D буфера, для реализации лишь логической ротации элементов, внешний простой рендер перебором на requestAnimationFrame 
   * <https://impfromliga.github.io/ringBuf2d/ex2_flowMove.html> - requestAnimationFrame обработчик события замещен на mover для плавного управления смещением на css 
-  * <https://impfromliga.github.io/ringBuf2d/ex3_autoFill.html> - функцию инициализации буфера преобразована в функцию filler, буфер становиться визуально бесшовным и бесконечным
-  * <https://impfromliga.github.io/ringBuf2d/ex4_autoDraw.html> - рендер функция разнесена по обработчикам mover/filler, максимизируется эффективность перерисовки
+  * <https://impfromliga.github.io/ringBuf2d/ex3_autoFill.html> - функция инициализации буфера преобразована в функцию filler, буфер становиться визуально бесшовным и бесконечным
+  * <https://impfromliga.github.io/ringBuf2d/ex4_autoDraw.html> - рендер функция разнесена по обработчикам mover/filler, максимизируется производительность перерисовки
   * <https://impfromliga.github.io/ringBuf2d/ex5_asyncLdr.html> - симуляция асинхронной нестабильной по пингу загрузки
+  * <https://impfromliga.github.io/ringBuf2d/ex6_limitLdr.html> - загрузчик лимитирован по растоянию и времени. Буфер теперь двигается грубо, для большей эффективности загрузки по сети. (см. Изменения в mover)
