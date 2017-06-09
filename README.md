@@ -80,4 +80,4 @@ buf2d.put(x, y, data, w) /* где:
   * <https://impfromliga.github.io/ringBuf2d/ex3_autoFill.html> - функция инициализации буфера преобразована в функцию filler, буфер становиться визуально бесшовным и бесконечным
   * <https://impfromliga.github.io/ringBuf2d/ex4_autoDraw.html> - рендер функция разнесена по обработчикам mover/filler, максимизируется производительность перерисовки
   * <https://impfromliga.github.io/ringBuf2d/ex5_asyncLdr.html> - симуляция асинхронной нестабильной по пингу загрузки
-  * <https://impfromliga.github.io/ringBuf2d/ex6_limitLdr.html> - загрузчик лимитирован по растоянию и времени. Буфер теперь двигается грубо, для большей эффективности загрузки по сети. (см. Изменения в mover)
+  * <https://impfromliga.github.io/ringBuf2d/ex6_limitLdr.html> - загрузчик лимитирован по растоянию и времени. Буфер теперь подгружается грубо (полная компенсация визуального сдвига на css остается), для большей эффективности загрузки по сети. (см. Изменения в mover)
